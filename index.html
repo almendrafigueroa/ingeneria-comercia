@@ -64,22 +64,75 @@ const asignaturas = [
   { id: "cont100", nombre: "Contabilidad para las Organizaciones", nivel: 100 },
   { id: "org100", nombre: "Administración de Organizaciones", nivel: 100 },
   { id: "ingles1", nombre: "Inglés I", nivel: 100 },
+  { id: "herr100", nombre: "Herramientas Digitales para la Gestión", nivel: 100 },
+  { id: "cfg1", nombre: "Curso de Formación General", nivel: 100 },
+
   // Nivel 200
   { id: "mat200", nombre: "Matemáticas para los Negocios I", nivel: 200, prereq: ["mat100"] },
   { id: "cont200", nombre: "Contabilidad Financiera", nivel: 200, prereq: ["cont100"] },
   { id: "func200", nombre: "Funciones Gerenciales", nivel: 200, prereq: ["org100"] },
   { id: "ingles2", nombre: "Inglés II", nivel: 200, prereq: ["ingles1"] },
+  { id: "herr200", nombre: "Herramientas Digitales Avanzadas", nivel: 200, prereq: ["herr100"] },
+  { id: "eco200", nombre: "Análisis Económico", nivel: 200 },
+  { id: "cfg2", nombre: "Curso de Formación General", nivel: 200 },
+
   // Nivel 300
   { id: "mat300", nombre: "Matemáticas para los Negocios II", nivel: 300, prereq: ["mat200"] },
   { id: "cont300", nombre: "Contabilidad para la Toma de Decisiones", nivel: 300, prereq: ["cont100"] },
-  { id: "eco300", nombre: "Análisis Económico", nivel: 300 },
+  { id: "eco300", nombre: "Análisis Microeconómico", nivel: 300, prereq: ["eco200"] },
   { id: "ingles3", nombre: "Inglés III", nivel: 300, prereq: ["ingles2"] },
+  { id: "derecho1", nombre: "Derecho Comercial", nivel: 300, prereq: ["func200"] },
+  { id: "cfg3", nombre: "Curso de Formación General", nivel: 300 },
+
+  // Nivel 400
+  { id: "datos1", nombre: "Análisis de Datos I", nivel: 400, prereq: ["mat200"] },
+  { id: "finanzas1", nombre: "Análisis Financiero", nivel: 400, prereq: ["cont300"] },
+  { id: "pers1", nombre: "Gestión de Personas", nivel: 400, prereq: ["func200"] },
+  { id: "eco400", nombre: "Microeconomía Aplicada", nivel: 400, prereq: ["eco300"] },
+  { id: "mkt1", nombre: "Marketing", nivel: 400 },
+  { id: "cfg4", nombre: "Curso de Formación General", nivel: 400 },
+  { id: "derecho2", nombre: "Derecho Laboral", nivel: 400, prereq: ["func200"] },
+
+  // Nivel 500
+  { id: "datos2", nombre: "Análisis de Datos II", nivel: 500, prereq: ["datos1"] },
+  { id: "finanzas2", nombre: "Mercado de Capitales", nivel: 500, prereq: ["finanzas1"] },
+  { id: "pers2", nombre: "Gestión Estratégica de Personas", nivel: 500, prereq: ["pers1"] },
+  { id: "eco500", nombre: "Análisis Macroeconómico", nivel: 500, prereq: ["mat100", "eco200"] },
+  { id: "mkt2", nombre: "Investigación de Mercado", nivel: 500, prereq: ["mkt1", "datos1"] },
+  { id: "cfg5", nombre: "Curso de Formación General", nivel: 500 },
+
+  // Nivel 600
+  { id: "practica1", nombre: "Práctica Intermedia", nivel: 600, prereq: ["mat300"] },
+  { id: "emprend", nombre: "Fundamentos de Emprendimiento", nivel: 600, prereq: ["finanzas2"] },
+  { id: "eco600", nombre: "Macroeconomía Aplicada", nivel: 600, prereq: ["eco500"] },
+  { id: "mkt3", nombre: "Marketing Estratégico", nivel: 600, prereq: ["mkt1"] },
+  { id: "cfg6", nombre: "Curso de Formación General", nivel: 600 },
+
+  // Nivel 700
+  { id: "finanzas3", nombre: "Finanzas Corporativas", nivel: 700, prereq: ["finanzas2"] },
+  { id: "cambio", nombre: "Gestión del Cambio", nivel: 700, prereq: ["emprend"] },
+  { id: "eco700", nombre: "Comportamiento Organizacional", nivel: 700, prereq: ["pers2"] },
+  { id: "mkt4", nombre: "Gestión de Operaciones y Procesos", nivel: 700, prereq: ["mkt2"] },
+  { id: "tributario", nombre: "Derecho Tributario", nivel: 700 },
+
   // Nivel 800
-  { id: "proy800", nombre: "Evaluación de Proyectos", nivel: 800, prereq: ["mat300", "func200"] }
+  { id: "estrategia", nombre: "Gestión Estratégica de Organizaciones", nivel: 800, prereq: ["emprend"] },
+  { id: "inno", nombre: "Innovación Social y Emprendimiento", nivel: 800, prereq: ["emprend"] },
+  { id: "proyectos", nombre: "Evaluación de Proyectos", nivel: 800, prereq: ["datos2", "pers2"] },
+  { id: "gobsocial", nombre: "Gestión de Organizaciones Sociales", nivel: 800 },
+
+  // Nivel 900
+  { id: "practica2", nombre: "Práctica Profesional", nivel: 900, prereq: ["estrategia"] },
+  { id: "juego", nombre: "Actividad de Graduación: Juego de Negocios", nivel: 900, prereq: ["inno"] },
+  { id: "control", nombre: "Control de Gestión", nivel: 900, prereq: ["proyectos"] },
+
+  // Nivel 1000
+  { id: "liderazgo", nombre: "Habilidades Directivas", nivel: 1000, prereq: ["eco600"] },
+  { id: "etica", nombre: "Ética en las Organizaciones", nivel: 1000, prereq: ["eco700"] },
+  { id: "optativo", nombre: "Optativo Profesional", nivel: 1000 }
 ];
 
 const niveles = [100,200,300,400,500,600,700,800,900,1000];
-
 const aprobadas = new Set();
 
 function renderMalla() {
@@ -109,7 +162,6 @@ function renderMalla() {
             renderMalla();
           }
         };
-
         col.appendChild(div);
       });
     }
