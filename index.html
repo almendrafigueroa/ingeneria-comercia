@@ -1,101 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malla Curricular Ingeniería Comercial UCSH</title>
-<style>
-  body { font-family: Arial, sans-serif; background-color: #fff0f5; margin: 0; padding: 20px; color: #333; }
-  h1 { text-align: center; color: #cc6699; }
-  .malla { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 20px; }
-  .nivel { background: #ffe6f0; min-width: 180px; flex-shrink: 0; padding: 10px; border-radius: 10px; }
-  .nivel h2 { text-align: center; color: #cc6699; font-size: 16px; }
-  .materia { background: #ffccda; padding: 6px; margin: 5px 0; border-radius: 8px; cursor: pointer; text-align: center; font-size: 13px; position: relative; transition: background 0.3s, color 0.3s; }
-  .materia.aprobada { background: #b3e6b3 !important; color: #2d572d; }
-  .materia.bloqueada { background: #f2f2f2; color: #999; cursor: not-allowed; }
-  .materia:hover::after { content: attr(data-tooltip); position: absolute; bottom: -1.5em; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 2px 6px; font-size: 10px; border-radius: 4px; white-space: nowrap; }
-</style>
+  <meta charset="UTF-8">
+  <title>Malla Curricular Ingeniería Comercial 2025</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #fff0f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #b76e79;
+    }
+    .malla {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+      margin-top: 30px;
+    }
+    .columna {
+      background-color: #fce4ec;
+      border-radius: 15px;
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .columna h2 {
+      text-align: center;
+      font-size: 16px;
+      color: #a65770;
+    }
+    .asignatura {
+      margin: 6px 0;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: #ffe3f1;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 13px;
+    }
+    .asignatura.aprobada {
+      background-color: #c3f5cc;
+      text-decoration: line-through;
+      color: #555;
+    }
+    .asignatura.bloqueada {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-<h1>Malla Curricular Ingeniería Comercial UCSH</h1>
+
+<h1>Malla Curricular Ingeniería Comercial 2025</h1>
+
 <div class="malla" id="malla"></div>
+
 <script>
-const materiasData = [
-  // NIVEL 100
-  { nivel:'100', nombre:'Matemática y Pensamiento Lógico' },
-  { nivel:'100', nombre:'Contabilidad para las Organizaciones' },
-  { nivel:'100', nombre:'Inglés I' },
-  { nivel:'100', nombre:'Administración de Organizaciones' },
-  { nivel:'100', nombre:'Herramientas Digitales para la Gestión' },
-  { nivel:'100', nombre:'Curso de Formación General' },
-
-  // NIVEL 200
-  { nivel:'200', nombre:'Matemáticas para los Negocios I', req:['Matemática y Pensamiento Lógico'] },
-  { nivel:'200', nombre:'Contabilidad Financiera', req:['Contabilidad para las Organizaciones'] },
-  { nivel:'200', nombre:'Inglés II', req:['Inglés I'] },
-  { nivel:'200', nombre:'Funciones Gerenciales', req:['Administración de Organizaciones'] },
-  { nivel:'200', nombre:'Herramientas Digitales Avanzadas', req:['Herramientas Digitales para la Gestión'] },
-  { nivel:'200', nombre:'Curso de Formación General' },
-
-  // NIVEL 300
-  { nivel:'300', nombre:'Matemáticas para los Negocios II', req:['Matemáticas para los Negocios I'] },
-  { nivel:'300', nombre:'Contabilidad para la Toma de Decisiones', req:['Contabilidad Financiera'] },
-  { nivel:'300', nombre:'Inglés III', req:['Inglés II'] },
-  { nivel:'300', nombre:'Análisis Económico', req:['Matemática y Pensamiento Lógico'] },
-  { nivel:'300', nombre:'Derecho Comercial' },
-  { nivel:'300', nombre:'Curso de Formación General' },
-
-  // Puedes seguir añadiendo más niveles según tu PDF (400, 500, 600, etc.)
+const asignaturas = [
+  // Nivel 100
+  { id: "mat100", nombre: "Matemática y Pensamiento Lógico", nivel: 100 },
+  { id: "cont100", nombre: "Contabilidad para las Organizaciones", nivel: 100 },
+  { id: "org100", nombre: "Administración de Organizaciones", nivel: 100 },
+  { id: "ingles1", nombre: "Inglés I", nivel: 100 },
+  // Nivel 200
+  { id: "mat200", nombre: "Matemáticas para los Negocios I", nivel: 200, prereq: ["mat100"] },
+  { id: "cont200", nombre: "Contabilidad Financiera", nivel: 200, prereq: ["cont100"] },
+  { id: "func200", nombre: "Funciones Gerenciales", nivel: 200, prereq: ["org100"] },
+  { id: "ingles2", nombre: "Inglés II", nivel: 200, prereq: ["ingles1"] },
+  // Nivel 300
+  { id: "mat300", nombre: "Matemáticas para los Negocios II", nivel: 300, prereq: ["mat200"] },
+  { id: "cont300", nombre: "Contabilidad para la Toma de Decisiones", nivel: 300, prereq: ["cont100"] },
+  { id: "eco300", nombre: "Análisis Económico", nivel: 300 },
+  { id: "ingles3", nombre: "Inglés III", nivel: 300, prereq: ["ingles2"] },
+  // Nivel 800
+  { id: "proy800", nombre: "Evaluación de Proyectos", nivel: 800, prereq: ["mat300", "func200"] }
 ];
 
-const malla = document.getElementById('malla');
-const estado = JSON.parse(localStorage.getItem('mallaEstado')) || {};
+const niveles = [100,200,300,400,500,600,700,800,900,1000];
 
-const niveles = [...new Set(materiasData.map(m => m.nivel))];
-niveles.forEach(nivel => {
-  const div = document.createElement('div');
-  div.className = 'nivel';
-  div.innerHTML = `<h2>Nivel ${nivel}</h2>`;
-  materiasData.filter(m => m.nivel === nivel).forEach(materia => {
-    const mDiv = document.createElement('div');
-    mDiv.className = 'materia';
-    mDiv.textContent = materia.nombre;
-    mDiv.dataset.nombre = materia.nombre;
-    if (materia.req) mDiv.dataset.req = JSON.stringify(materia.req);
-    div.appendChild(mDiv);
-  });
-  malla.appendChild(div);
-});
+const aprobadas = new Set();
 
-function actualizarEstado() {
-  document.querySelectorAll('.materia').forEach(m => {
-    const nombre = m.dataset.nombre;
-    const reqs = m.dataset.req ? JSON.parse(m.dataset.req) : [];
-    const aprobada = estado[nombre];
-    const bloqueada = reqs.some(r => !estado[r]);
-    m.classList.toggle('bloqueada', bloqueada && !aprobada);
-    m.classList.toggle('aprobada', aprobada);
-    if (aprobada) {
-      m.dataset.tooltip = 'Aprobada';
-    } else if (bloqueada) {
-      m.dataset.tooltip = 'Requiere: ' + reqs.filter(r => !estado[r]).join(', ');
+function renderMalla() {
+  const contenedor = document.getElementById("malla");
+  contenedor.innerHTML = "";
+
+  niveles.forEach(nivel => {
+    const col = document.createElement("div");
+    col.className = "columna";
+    col.innerHTML = `<h2>Nivel ${nivel}</h2>`;
+
+    const asigns = asignaturas.filter(a => a.nivel === nivel);
+    if (asigns.length === 0) {
+      col.innerHTML += "<div style='font-size:12px; text-align:center; color:#aaa'>Sin ramos</div>";
     } else {
-      m.dataset.tooltip = 'Haz clic para aprobar';
+      asigns.forEach(asig => {
+        const bloqueada = asig.prereq && !asig.prereq.every(p => aprobadas.has(p));
+        const div = document.createElement("div");
+        div.className = "asignatura";
+        if (aprobadas.has(asig.id)) div.classList.add("aprobada");
+        else if (bloqueada) div.classList.add("bloqueada");
+
+        div.textContent = asig.nombre;
+        div.onclick = () => {
+          if (!bloqueada && !aprobadas.has(asig.id)) {
+            aprobadas.add(asig.id);
+            renderMalla();
+          }
+        };
+
+        col.appendChild(div);
+      });
     }
+
+    contenedor.appendChild(col);
   });
-  localStorage.setItem('mallaEstado', JSON.stringify(estado));
 }
 
-document.querySelectorAll('.materia').forEach(m => {
-  m.addEventListener('click', () => {
-    if (m.classList.contains('bloqueada')) return;
-    const nombre = m.dataset.nombre;
-    estado[nombre] = !estado[nombre];
-    actualizarEstado();
-  });
-});
-
-actualizarEstado();
+renderMalla();
 </script>
+
 </body>
 </html>
