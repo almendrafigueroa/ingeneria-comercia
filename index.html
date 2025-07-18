@@ -1,177 +1,181 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Malla Curricular Ingeniería Comercial 2025</title>
+  <meta charset="UTF-8" />
+  <title>Malla Curricular Interactiva</title>
   <style>
     body {
       font-family: sans-serif;
-      background-color: #fff0f5;
-      margin: 0;
+      background-color: #fce4ec;
+      color: #4a148c;
+    }
+    .container {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 20px;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: #b76e79;
-    }
-    .malla {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 10px;
-      margin-top: 30px;
-    }
-    .columna {
-      background-color: #fce4ec;
+    .nivel {
+      background: #f8bbd0;
+      border: 2px solid #ba68c8;
       border-radius: 15px;
       padding: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      min-width: 220px;
     }
-    .columna h2 {
+    .nivel h3 {
       text-align: center;
-      font-size: 16px;
-      color: #a65770;
+      color: #880e4f;
     }
-    .asignatura {
+    .ramo {
       margin: 6px 0;
-      padding: 8px;
-      border-radius: 8px;
-      background-color: #ffe3f1;
       cursor: pointer;
-      transition: background-color 0.3s;
-      font-size: 13px;
+      padding: 6px;
+      border-radius: 5px;
+      background: #f3e5f5;
+      transition: all 0.3s;
     }
-    .asignatura.aprobada {
-      background-color: #c3f5cc;
+    .ramo:hover {
+      background: #e1bee7;
+    }
+    .ramo.aprobado {
       text-decoration: line-through;
-      color: #555;
+      background-color: #d1c4e9;
+      color: #6a1b9a;
     }
-    .asignatura.bloqueada {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .ramo.bloqueado {
+      opacity: 0.4;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
+  <h1 style="text-align:center;">Malla Curricular Interactiva</h1>
+  <div class="container" id="malla"></div>  <script>
+    const ramos = {
+      "Nivel 100": [
+        { id: "mat_logica", nombre: "Matemática y Pensamiento Lógico" },
+        { id: "conta_org", nombre: "Contabilidad para las Organizaciones" },
+        { id: "ing1", nombre: "Inglés I" },
+        { id: "adm_org", nombre: "Administración de Organizaciones" },
+        { id: "herr_dig", nombre: "Herramientas Digitales para la Gestión" },
+        { id: "cfg_100", nombre: "Curso de Formación General" },
+      ],
+      "Nivel 200": [
+        { id: "mat_neg1", nombre: "Matemáticas para los Negocios I", prereqs: ["mat_logica"] },
+        { id: "conta_fin", nombre: "Contabilidad Financiera", prereqs: ["conta_org"] },
+        { id: "ing2", nombre: "Inglés II", prereqs: ["ing1"] },
+        { id: "funciones", nombre: "Funciones Gerenciales", prereqs: ["adm_org"] },
+        { id: "herr_avz", nombre: "Herramientas Digitales Avanzadas", prereqs: ["herr_dig"] },
+        { id: "cfg_200", nombre: "Curso de Formación General" },
+      ],
+      "Nivel 300": [
+        { id: "mat_neg2", nombre: "Matemáticas para los Negocios II", prereqs: ["mat_neg1"] },
+        { id: "conta_dec", nombre: "Contabilidad para la Toma de Decisiones", prereqs: ["conta_fin"] },
+        { id: "ing3", nombre: "Inglés III", prereqs: ["ing2"] },
+        { id: "eco", nombre: "Análisis Económico" },
+        { id: "der_com", nombre: "Derecho Comercial" },
+        { id: "cfg_300", nombre: "Curso de Formación General" },
+      ],
+      "Nivel 400": [
+        { id: "anal_datos1", nombre: "Análisis de Datos I", prereqs: ["mat_neg1"] },
+        { id: "anal_fin", nombre: "Análisis Financiero", prereqs: ["conta_org"] },
+        { id: "ges_pers", nombre: "Gestión de Personas", prereqs: ["funciones"] },
+        { id: "mic_eco", nombre: "Análisis Microeconómico", prereqs: ["mat_logica", "eco"] },
+        { id: "der_lab", nombre: "Derecho Laboral" },
+        { id: "cfg_400", nombre: "Curso de Formación General" },
+      ],
+      "Nivel 500": [
+        { id: "anal_datos2", nombre: "Análisis de Datos II", prereqs: ["anal_datos1"] },
+        { id: "merc_cap", nombre: "Mercado de Capitales", prereqs: ["anal_fin"] },
+        { id: "ges_estr", nombre: "Gestión Estratégica de Personas", prereqs: ["ges_pers"] },
+        { id: "micro_apl", nombre: "Microeconomía Aplicada", prereqs: ["mic_eco"] },
+        { id: "mkt", nombre: "Marketing", prereqs: ["funciones"] },
+        { id: "cfg_500", nombre: "Curso de Formación General" },
+      ],
+      "Nivel 600": [
+        { id: "practica", nombre: "Práctica Intermedia" },
+        { id: "econom", nombre: "Econometría", prereqs: ["anal_datos2"] },
+        { id: "macro_anal", nombre: "Análisis Macroeconómico", prereqs: ["mat_logica", "eco"] },
+        { id: "inv_merc", nombre: "Investigación de Mercado", prereqs: ["mkt", "anal_datos1"] },
+        { id: "cfg_600", nombre: "Curso de Formación General" },
+      ],
+      "Nivel 700": [
+        { id: "fin_corp", nombre: "Finanzas Corporativas", prereqs: ["merc_cap"] },
+        { id: "fund_emp", nombre: "Fundamentos de Emprendimiento" },
+        { id: "comp_org", nombre: "Comportamiento Organizacional", prereqs: ["ges_estr"] },
+        { id: "macro_apl", nombre: "Macroeconomía Aplicada", prereqs: ["mic_eco"] },
+        { id: "mkt_estr", nombre: "Marketing Estratégico", prereqs: ["mkt"] },
+        { id: "der_trib", nombre: "Derecho Tributario" },
+      ],
+      "Nivel 800": [
+        { id: "empr", nombre: "Emprendimiento", prereqs: ["fund_emp"] },
+        { id: "ges_cambio", nombre: "Gestión del Cambio" },
+        { id: "eval_proj", nombre: "Formulación y Evaluación de Proyectos" },
+        { id: "hab_dir", nombre: "Habilidades Directivas", prereqs: ["comp_org"] },
+        { id: "ges_op", nombre: "Gestión de Operaciones y Procesos" },
+        { id: "ges_soc", nombre: "Gestión de Organizaciones Sociales" },
+      ],
+      "Nivel 900": [
+        { id: "ges_estr_org", nombre: "Gestión Estratégica de Organizaciones" },
+        { id: "inn_emp", nombre: "Innovación Social y Emprendimiento", prereqs: ["fund_emp"] },
+        { id: "ctrl_gest", nombre: "Control de Gestión" },
+        { id: "etica", nombre: "Ética en las Organizaciones" },
+        { id: "opt1", nombre: "Optativo" },
+        { id: "opt2", nombre: "Optativo" },
+      ],
+      "Nivel 1000": [
+        { id: "pract_prof", nombre: "Práctica Profesional" },
+        { id: "juego_neg", nombre: "Actividad de Graduación: Juego de Negocios" },
+      ],
+    };
 
-<h1>Malla Curricular Ingeniería Comercial 2025</h1>
+    const aprobados = JSON.parse(localStorage.getItem("aprobados") || "[]");
+    const container = document.getElementById("malla");
 
-<div class="malla" id="malla"></div>
+    function crearMalla() {
+      container.innerHTML = "";
+      for (let nivel in ramos) {
+        const columna = document.createElement("div");
+        columna.className = "nivel";
+        const titulo = document.createElement("h3");
+        titulo.textContent = nivel;
+        columna.appendChild(titulo);
 
-<script>
-const asignaturas = [
-  // Nivel 100
-  { id: "mat100", nombre: "Matemática y Pensamiento Lógico", nivel: 100 },
-  { id: "cont100", nombre: "Contabilidad para las Organizaciones", nivel: 100 },
-  { id: "org100", nombre: "Administración de Organizaciones", nivel: 100 },
-  { id: "ingles1", nombre: "Inglés I", nivel: 100 },
-  { id: "herr100", nombre: "Herramientas Digitales para la Gestión", nivel: 100 },
-  { id: "cfg1", nombre: "Curso de Formación General", nivel: 100 },
+        ramos[nivel].forEach(ramo => {
+          const div = document.createElement("div");
+          div.className = "ramo";
+          div.textContent = ramo.nombre;
+          div.dataset.id = ramo.id;
 
-  // Nivel 200
-  { id: "mat200", nombre: "Matemáticas para los Negocios I", nivel: 200, prereq: ["mat100"] },
-  { id: "cont200", nombre: "Contabilidad Financiera", nivel: 200, prereq: ["cont100"] },
-  { id: "func200", nombre: "Funciones Gerenciales", nivel: 200, prereq: ["org100"] },
-  { id: "ingles2", nombre: "Inglés II", nivel: 200, prereq: ["ingles1"] },
-  { id: "herr200", nombre: "Herramientas Digitales Avanzadas", nivel: 200, prereq: ["herr100"] },
-  { id: "eco200", nombre: "Análisis Económico", nivel: 200 },
-  { id: "cfg2", nombre: "Curso de Formación General", nivel: 200 },
+          const tienePrereqs = ramo.prereqs && ramo.prereqs.length > 0;
+          const prereqsCumplidos = !tienePrereqs || ramo.prereqs.every(p => aprobados.includes(p));
 
-  // Nivel 300
-  { id: "mat300", nombre: "Matemáticas para los Negocios II", nivel: 300, prereq: ["mat200"] },
-  { id: "cont300", nombre: "Contabilidad para la Toma de Decisiones", nivel: 300, prereq: ["cont100"] },
-  { id: "eco300", nombre: "Análisis Microeconómico", nivel: 300, prereq: ["eco200"] },
-  { id: "ingles3", nombre: "Inglés III", nivel: 300, prereq: ["ingles2"] },
-  { id: "derecho1", nombre: "Derecho Comercial", nivel: 300, prereq: ["func200"] },
-  { id: "cfg3", nombre: "Curso de Formación General", nivel: 300 },
-
-  // Nivel 400
-  { id: "datos1", nombre: "Análisis de Datos I", nivel: 400, prereq: ["mat200"] },
-  { id: "finanzas1", nombre: "Análisis Financiero", nivel: 400, prereq: ["cont300"] },
-  { id: "pers1", nombre: "Gestión de Personas", nivel: 400, prereq: ["func200"] },
-  { id: "eco400", nombre: "Microeconomía Aplicada", nivel: 400, prereq: ["eco300"] },
-  { id: "mkt1", nombre: "Marketing", nivel: 400 },
-  { id: "cfg4", nombre: "Curso de Formación General", nivel: 400 },
-  { id: "derecho2", nombre: "Derecho Laboral", nivel: 400, prereq: ["func200"] },
-
-  // Nivel 500
-  { id: "datos2", nombre: "Análisis de Datos II", nivel: 500, prereq: ["datos1"] },
-  { id: "finanzas2", nombre: "Mercado de Capitales", nivel: 500, prereq: ["finanzas1"] },
-  { id: "pers2", nombre: "Gestión Estratégica de Personas", nivel: 500, prereq: ["pers1"] },
-  { id: "eco500", nombre: "Análisis Macroeconómico", nivel: 500, prereq: ["mat100", "eco200"] },
-  { id: "mkt2", nombre: "Investigación de Mercado", nivel: 500, prereq: ["mkt1", "datos1"] },
-  { id: "cfg5", nombre: "Curso de Formación General", nivel: 500 },
-
-  // Nivel 600
-  { id: "practica1", nombre: "Práctica Intermedia", nivel: 600, prereq: ["mat300"] },
-  { id: "emprend", nombre: "Fundamentos de Emprendimiento", nivel: 600, prereq: ["finanzas2"] },
-  { id: "eco600", nombre: "Macroeconomía Aplicada", nivel: 600, prereq: ["eco500"] },
-  { id: "mkt3", nombre: "Marketing Estratégico", nivel: 600, prereq: ["mkt1"] },
-  { id: "cfg6", nombre: "Curso de Formación General", nivel: 600 },
-
-  // Nivel 700
-  { id: "finanzas3", nombre: "Finanzas Corporativas", nivel: 700, prereq: ["finanzas2"] },
-  { id: "cambio", nombre: "Gestión del Cambio", nivel: 700, prereq: ["emprend"] },
-  { id: "eco700", nombre: "Comportamiento Organizacional", nivel: 700, prereq: ["pers2"] },
-  { id: "mkt4", nombre: "Gestión de Operaciones y Procesos", nivel: 700, prereq: ["mkt2"] },
-  { id: "tributario", nombre: "Derecho Tributario", nivel: 700 },
-
-  // Nivel 800
-  { id: "estrategia", nombre: "Gestión Estratégica de Organizaciones", nivel: 800, prereq: ["emprend"] },
-  { id: "inno", nombre: "Innovación Social y Emprendimiento", nivel: 800, prereq: ["emprend"] },
-  { id: "proyectos", nombre: "Evaluación de Proyectos", nivel: 800, prereq: ["datos2", "pers2"] },
-  { id: "gobsocial", nombre: "Gestión de Organizaciones Sociales", nivel: 800 },
-
-  // Nivel 900
-  { id: "practica2", nombre: "Práctica Profesional", nivel: 900, prereq: ["estrategia"] },
-  { id: "juego", nombre: "Actividad de Graduación: Juego de Negocios", nivel: 900, prereq: ["inno"] },
-  { id: "control", nombre: "Control de Gestión", nivel: 900, prereq: ["proyectos"] },
-
-  // Nivel 1000
-  { id: "liderazgo", nombre: "Habilidades Directivas", nivel: 1000, prereq: ["eco600"] },
-  { id: "etica", nombre: "Ética en las Organizaciones", nivel: 1000, prereq: ["eco700"] },
-  { id: "optativo", nombre: "Optativo Profesional", nivel: 1000 }
-];
-
-const niveles = [100,200,300,400,500,600,700,800,900,1000];
-const aprobadas = new Set();
-
-function renderMalla() {
-  const contenedor = document.getElementById("malla");
-  contenedor.innerHTML = "";
-
-  niveles.forEach(nivel => {
-    const col = document.createElement("div");
-    col.className = "columna";
-    col.innerHTML = `<h2>Nivel ${nivel}</h2>`;
-
-    const asigns = asignaturas.filter(a => a.nivel === nivel);
-    if (asigns.length === 0) {
-      col.innerHTML += "<div style='font-size:12px; text-align:center; color:#aaa'>Sin ramos</div>";
-    } else {
-      asigns.forEach(asig => {
-        const bloqueada = asig.prereq && !asig.prereq.every(p => aprobadas.has(p));
-        const div = document.createElement("div");
-        div.className = "asignatura";
-        if (aprobadas.has(asig.id)) div.classList.add("aprobada");
-        else if (bloqueada) div.classList.add("bloqueada");
-
-        div.textContent = asig.nombre;
-        div.onclick = () => {
-          if (!bloqueada && !aprobadas.has(asig.id)) {
-            aprobadas.add(asig.id);
-            renderMalla();
+          if (!prereqsCumplidos) {
+            div.classList.add("bloqueado");
           }
-        };
-        col.appendChild(div);
-      });
+
+          if (aprobados.includes(ramo.id)) {
+            div.classList.add("aprobado");
+          }
+
+          div.addEventListener("click", () => {
+            const index = aprobados.indexOf(ramo.id);
+            if (index === -1) {
+              aprobados.push(ramo.id);
+            } else {
+              aprobados.splice(index, 1);
+            }
+            localStorage.setItem("aprobados", JSON.stringify(aprobados));
+            crearMalla();
+          });
+
+          columna.appendChild(div);
+        });
+
+        container.appendChild(columna);
+      }
     }
 
-    contenedor.appendChild(col);
-  });
-}
-
-renderMalla();
-</script>
-
-</body>
+    crearMalla();
+  </script></body>
 </html>
